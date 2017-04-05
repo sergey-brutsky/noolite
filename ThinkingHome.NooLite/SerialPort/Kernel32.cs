@@ -32,7 +32,7 @@ namespace ThinkingHome.NooLite.SerialPort
         static extern bool WriteFile (int handle, IntPtr buffer, int bytes_to_write, out int bytes_written, IntPtr overlapped);
 
         [StructLayout (LayoutKind.Sequential)]
-        public struct DCB
+        public class DCB
         {
             public int dcb_length;
             public int baud_rate;
