@@ -23,13 +23,18 @@ namespace ThinkingHome.NooLite.SerialPort
         public static extern bool SetCommState (int handle, DCB dcb);
 
         [DllImport("kernel32", SetLastError = true)]
+        public static extern bool SetCommTimeouts(int handle, Timeouts timeouts);
+
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool ReadFile (int handle, IntPtr buffer, int bytes_to_read, out int bytes_read, IntPtr overlapped);
+
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool WriteFile (int handle, IntPtr buffer, int bytes_to_write, out int bytes_written, IntPtr overlapped);
+
+        [DllImport("kernel32", SetLastError = true)]
         public static extern bool CloseHandle (int handle);
 
-        [DllImport("kernel32", SetLastError = true)]
-        static extern bool ReadFile (int handle, IntPtr buffer, int bytes_to_read, out int bytes_read, IntPtr overlapped);
-
-        [DllImport("kernel32", SetLastError = true)]
-        static extern bool WriteFile (int handle, IntPtr buffer, int bytes_to_write, out int bytes_written, IntPtr overlapped);
+        #region structures
 
         [StructLayout (LayoutKind.Sequential)]
         public class DCB
@@ -50,5 +55,19 @@ namespace ThinkingHome.NooLite.SerialPort
             public byte evt_char;
             public short w_reserved1;
         }
+
+        [StructLayout (LayoutKind.Sequential)]
+        public class Timeouts
+        {
+            public uint ReadIntervalTimeout;
+            public uint ReadTotalTimeoutMultiplier;
+            public uint ReadTotalTimeoutConstant;
+            public uint WriteTotalTimeoutMultiplier;
+            public uint WriteTotalTimeoutConstant;
+
+            public const uint MaxDWord = 0xFFFFFFFF;
+        }
+
+        #endregion
     }
 }

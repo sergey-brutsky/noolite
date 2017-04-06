@@ -12,8 +12,8 @@ namespace ThinkingHome.NooLite.SerialPort
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
         private CancellationToken CancellationToken => cts.Token;
 
-        private int? fd;
         private readonly IntPtr readingBuffer = Marshal.AllocHGlobal(READING_BUFFER_SIZE);
+        private int? fd;
 
         public UnixSerialDevice(string portName, BaudRate baudRate) : base(portName, baudRate)
         {
@@ -57,10 +57,15 @@ namespace ThinkingHome.NooLite.SerialPort
 
                 if (res != -1)
                 {
+                    // если нет ошибки
                     byte[] buf = new byte[res];
                     Marshal.Copy(readingBuffer, buf, 0, res);
 
                     OnDataReceived(buf);
+                }
+                else
+                {
+                    // ошибка
                 }
 
                 Thread.Sleep(50);
